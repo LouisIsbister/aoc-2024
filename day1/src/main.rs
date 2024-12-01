@@ -10,7 +10,7 @@ fn main() {
 }
 
 ///
-/// Task 2
+/// Task 1
 /// 
 fn distance(mut l1: Vec<i64>, mut l2: Vec<i64>) -> i64 {
     l1.sort_by(|a, b| a.cmp(b));
@@ -21,7 +21,7 @@ fn distance(mut l1: Vec<i64>, mut l2: Vec<i64>) -> i64 {
 }
 
 ///
-/// Task 1
+/// Task 2
 /// 
 fn similarity_score(l1: Vec<i64>, l2: Vec<i64>) -> i64 {
     l1.iter().fold(
