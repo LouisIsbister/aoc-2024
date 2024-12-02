@@ -26,7 +26,7 @@ fn distance(mut l1: Vec<i64>, mut l2: Vec<i64>) -> i64 {
 fn similarity_score(l1: Vec<i64>, l2: Vec<i64>) -> i64 {
     l1.iter().fold(
         0i64, 
-        |acc, x| acc + x * l2.iter().filter(|y| *x == **y).count() as i64
+        |acc, x| acc + *x * (l2.iter().filter(|y| *x == **y).count() as i64)
     )
 }
 
