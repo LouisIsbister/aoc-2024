@@ -7,13 +7,9 @@ fn main() {
 }
 
 fn safe_level_count(levels: Vec<Vec<i64>>) -> u64 {
-    let mut safe_count = 0;
-    for level in levels {
-        if is_decr(&level) || is_incr(&level) || check_dampening(&level) {
-            safe_count += 1
-        }
-    }
-    safe_count
+    levels.iter()
+        .filter(|level| is_decr(*level) || is_incr(*level) || check_dampening(*level))
+        .count() as u64
 }
 
 ///
