@@ -2,7 +2,7 @@ use regex::Regex;
 
 fn main() {
     let file = std::fs::read_to_string("input.txt").expect("Cannot read file!");
-    let res = compute(&file);
+    let res = with_regex(&file);
     assert_eq!(59097164, res);
 
     let res2 = solution_without_regex(&file.as_str());
@@ -10,12 +10,12 @@ fn main() {
 }
 
 ///
-/// Part 1 and 2
+/// Part 1 and 2 solution using regex
 /// Matches all the 'mul(?,?)'s, 'do()'s, and 'don't()'s, extracts the 
 /// values and adds them if the previous conditional capture was a 'do()'
 /// Finally returns the sum of the uncorrupted multiplications 
 /// 
-fn compute(file: &String) -> i64 {
+fn with_regex(file: &String) -> i64 {
     let pattern = Regex::new(r"(mul\(\d{1,3},\d{1,3}\)|don't\(\)|do\(\))").expect("Invalid regex");
     let mut add = true;
 
@@ -39,7 +39,6 @@ fn compute(file: &String) -> i64 {
 }
 
 
-
 ///
 /// Part 1 and 2 solution without regex!!
 /// 
@@ -54,26 +53,23 @@ impl<'a> Lexer<'a> {
     }
 
     pub fn current_char(&self) -> Option<char> {
-        if self.ptr + 1 <= self.content.len() {
-            self.content.chars().nth(self.ptr)
-        } else {
-            None
-        }
+        self.content.chars().nth(self.ptr)
     }
+
     pub fn advance(&mut self, adv: usize) {
         self.ptr += adv
     }
 
     pub fn check_matches_and_advance(&mut self, check: &str) -> bool {
-        if self.ptr + check.len() <= self.content.len() {
-            let res = check.eq(&self.content[self.ptr..self.ptr + check.len()]);
-            if res {
-                self.advance(check.len());
-            }
-            res
-        } else {
-            false
-        }
+        self.content.get(self.ptr..self.ptr + check.len())
+            .map_or(false, |slice| {
+                if slice.eq(check) {
+                    self.advance(check.len());
+                    true
+                } else {
+                    false
+                }
+            })
     }
 }
 
@@ -86,10 +82,8 @@ fn solution_without_regex(content: &str) -> i64 {
         match ch {
             'd' => parse_do_dont(&mut lexer, &mut add),
             'm' => {
-                let (left, right) = parse_mul(&mut lexer);
-                if add {
-                    ret += left * right
-                }
+                let val = parse_mul(&mut lexer);
+                ret += if add { val } else { 0 }
             },
             _ => lexer.advance(1),
         } 
@@ -103,27 +97,26 @@ fn parse_do_dont(lexer: &mut Lexer, add: &mut bool) {
     } else if lexer.check_matches_and_advance("don't()") {
         *add = false;
     } else {
-        lexer.advance(1);
+        lexer.advance(1);    // advance past the matched 'd'
     }
 }
 
-fn parse_mul(lexer: &mut Lexer) -> (i64, i64) {
+fn parse_mul(lexer: &mut Lexer) -> i64 {
     if !lexer.check_matches_and_advance("mul(") {
-        lexer.advance(1);
-        return (0, 0)
+        lexer.advance(1);    // advance past the matched 'm'
+        return 0
     }
     
     let left = parse_number(lexer);
     if !lexer.check_matches_and_advance(",") {
-        return (0, 0)
+        return 0
     }
     
     let right = parse_number(lexer);
     if !lexer.check_matches_and_advance(")") {
-        return (0, 0)
+        return 0
     }
-
-    (left, right)
+    left * right
 }
 
 fn parse_number(lexer: &mut Lexer) -> i64 {
