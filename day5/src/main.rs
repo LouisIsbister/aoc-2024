@@ -23,21 +23,15 @@ fn p1_solution(ordering: &HashMap<i64, Vec<i64>>, tasks: &Vec<Vec<i64>>) -> i64 
 }
 
 fn p2_solution(ordering: &HashMap<i64, Vec<i64>>, tasks: &Vec<Vec<i64>>) -> i64 {
-    let mut invalid_tasks: Vec<Vec<i64>> = tasks.iter().cloned()
-        .filter(|t| !is_valid_task(&t, &ordering))
-        .collect();
-
-    fix_all_tasks(&mut invalid_tasks, ordering)
-}
-
-
-fn fix_all_tasks(tasks: &mut Vec<Vec<i64>>, ordering: &HashMap<i64, Vec<i64>>) -> i64 {
     tasks.iter()
-        .map(|task| fix_task(task.clone(), ordering))
+        .cloned()
+        .filter(|task| !is_valid_task(&task, &ordering))  // get all the invalid tasks
+        .map(|task| fix_task(task.clone(), &ordering))   // fix all the invalid tasks
+        .map(|task| task[task.len() / 2])
         .sum::<i64>()
 }
 
-fn fix_task(mut task: Vec<i64>, ordering: &HashMap<i64, Vec<i64>>) -> i64 {
+fn fix_task(mut task: Vec<i64>, ordering: &HashMap<i64, Vec<i64>>) -> Vec<i64> {
     while !is_valid_task(&task, ordering){
         for i in 1..task.len() {
             let prev_key = task[i - 1];
@@ -49,7 +43,7 @@ fn fix_task(mut task: Vec<i64>, ordering: &HashMap<i64, Vec<i64>>) -> i64 {
             }
         }
     }
-    *task.get(task.len() / 2).expect("Who knows what happened")
+    task
 }
 
 ///
