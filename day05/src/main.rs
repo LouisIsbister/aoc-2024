@@ -13,13 +13,13 @@ fn main() {
 
 fn p1_solution(ordering: &HashMap<i64, Vec<i64>>, tasks: &Vec<Vec<i64>>) -> i64 {
     tasks.iter()
-        .map(|task| {
-            if is_valid_task(task, ordering) {
-                *task.get(task.len() / 2).expect("Who knows what happened")
-            } else {
-                0
-            }
-        }).sum::<i64>()
+        .map(|task| 
+            if is_valid_task(task, ordering) { 
+                task[task.len() / 2] 
+            } else { 
+                0 
+            })
+        .sum::<i64>()
 }
 
 fn p2_solution(ordering: &HashMap<i64, Vec<i64>>, tasks: &Vec<Vec<i64>>) -> i64 {
