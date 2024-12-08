@@ -14,10 +14,10 @@ fn main() {
 fn p1_solution(ordering: &HashMap<i64, Vec<i64>>, tasks: &Vec<Vec<i64>>) -> i64 {
     tasks.iter()
         .map(|task| 
-            if is_valid_task(task, ordering) { 
-                task[task.len() / 2] 
-            } else { 
-                0 
+            if is_valid_task(task, ordering) {
+                task[task.len() / 2]
+            } else {
+                0
             })
         .sum::<i64>()
 }
@@ -64,12 +64,12 @@ fn is_valid_task(task: &Vec<i64>, ordering: &HashMap<i64, Vec<i64>>) -> bool {
 }
 
 ///
-/// Extraction the order rules and tasks from the input file
+/// Extract the order rules and tasks from the input file
 /// 
 
 fn extract_instructions(file: &String) -> (HashMap<i64, Vec<i64>>, Vec<Vec<i64>>) {
     let mut lines = file.lines();   
-    
+
     // parse the printing orders
     let mut ordering: HashMap<i64, Vec<i64>> = HashMap::new();
     while let Some(line) = lines.next() {
@@ -100,5 +100,7 @@ fn parse_order(line: &str, ordering: &mut HashMap<i64, Vec<i64>>) {
 
 fn parse_task(line: &str, tasks: &mut Vec<Vec<i64>>) {
     let split = line.split(",");
-    tasks.push(split.map(|e| e.parse().expect("Not an int!")).collect());
+    tasks.push(
+        split.map(|e| e.parse().expect("Not an int!")).collect()
+    );
 }

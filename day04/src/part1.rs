@@ -1,10 +1,7 @@
-
 pub fn file_to_matrix(file: &String) -> Vec<Vec<String>> {
     file.lines()
-            .map(|line| line.chars()
-                    .map(|c| c.to_string())
-                    .collect::<Vec<_>>())
-            .collect()
+        .map(|line| line.chars().map(|c| c.to_string()).collect::<Vec<_>>())
+        .collect()
 }
 
 pub fn p1_solution(file: &String) -> u64 {
@@ -26,12 +23,26 @@ pub fn p1_solution(file: &String) -> u64 {
     counter
 }
 
-fn check_xmas_at_point(x: i32, y: i32, mat: &Vec<Vec<String>>, directions: &Vec<(i32, i32)>, counter: &mut u64) {
+fn check_xmas_at_point(
+    x: i32,
+    y: i32,
+    mat: &Vec<Vec<String>>,
+    directions: &Vec<(i32, i32)>,
+    counter: &mut u64,
+) {
     for (xincr, yincr) in directions {
-        if !check_eq(x, y, "X", mat) { continue }
-        if !check_eq(x + xincr, y + yincr, "M", mat) { continue }
-        if !check_eq(x + 2 * xincr, y + 2 * yincr, "A", mat) { continue }
-        if check_eq(x + 3 * xincr, y + 3 * yincr, "S", mat) { *counter += 1 }  // found an XMAS
+        if !check_eq(x, y, "X", mat) {
+            continue;
+        }
+        if !check_eq(x + xincr, y + yincr, "M", mat) {
+            continue;
+        }
+        if !check_eq(x + 2 * xincr, y + 2 * yincr, "A", mat) {
+            continue;
+        }
+        if check_eq(x + 3 * xincr, y + 3 * yincr, "S", mat) {
+            *counter += 1
+        } // found an XMAS
     }
 }
 
