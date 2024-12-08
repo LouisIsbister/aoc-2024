@@ -5,19 +5,17 @@ use std::collections::HashSet;
 
 pub fn p2_solution() -> u32 {
     let (board, mut guard) = load_file();
-    let (sx, sy, sdir) = (guard.x, guard.y, guard.dir);
-    let mut cycle_count: u32 = 0;
-    
-    let fresh_guard = |dir: Direction, x: i32, y: i32| {
-        Guard::new(dir, x, y)
-    };
 
+    let default_guard = (guard.dir, guard.x, guard.y);
+    let fresh_guard = || Guard::new(default_guard.0, default_guard.1, default_guard.2);
+
+    let mut cycle_count: u32 = 0;
     let mut seen: HashSet<(i32, i32)> = HashSet::new();
     while let Some((nx, ny)) = verify_next_position(&guard, &board) {
         match board[ny as usize][nx as usize] {
             '.' => {
                 if !seen.contains(&(nx, ny)) {
-                    cycle_count += simulate_barrier(nx, ny, &mut fresh_guard(sdir, sx, sy), board.clone());
+                    cycle_count += simulate_barrier(nx, ny, &mut fresh_guard(), board.clone());
                 }
                 seen.insert((nx, ny));
                 guard.p2_update_pos();
