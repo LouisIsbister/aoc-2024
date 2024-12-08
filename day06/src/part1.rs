@@ -12,11 +12,10 @@ pub fn p1_solution() -> u64 {
 
         let cur_pos = board[y as usize][x as usize]; 
         match cur_pos {
-            '_' | '.' => {
+            '_' => guard.p1_update_pos(&mut board),
+            '.' => {
                 guard.p1_update_pos(&mut board);
-                if cur_pos == '.' { 
-                    ret += 1 
-                }
+                ret += 1
             },
             '#' => guard.turn_ninety_degress(),
             _ => ()

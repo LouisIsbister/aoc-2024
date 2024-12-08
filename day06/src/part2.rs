@@ -22,9 +22,7 @@ pub fn p2_solution() -> u32 {
                 seen.insert((nx, ny));
                 guard.p2_update_pos();
             },
-            '#' => {
-                guard.turn_ninety_degress();
-            },
+            '#' => guard.turn_ninety_degress(),
             _ => ()
         }
         
@@ -42,9 +40,7 @@ fn simulate_barrier(x: i32, y: i32, guard: &mut Guard, mut board: Vec<Vec<char>>
         if let Some((nx, ny)) = verify_next_position(&guard, &board) {
             match board[ny as usize][nx as usize] {
                 '.' => guard.p2_update_pos(),
-                '#' => { 
-                    guard.turn_ninety_degress();
-                },
+                '#' => guard.turn_ninety_degress(),
                 _ => panic!("Not a valid token!")
             }
         } else {
