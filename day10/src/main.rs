@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-/// for every 0 in the input, berofmr a bfs from that point to find the number of reachable 9's
+/// for every 0 in the input, perform a dfs from that point to find the number of reachable 9's
 fn main() {
     let fstr = std::fs::read_to_string("input.txt").expect("Cannot read input!");
     let map = retrieve_map(&fstr);
