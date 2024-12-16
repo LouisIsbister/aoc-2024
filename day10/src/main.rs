@@ -22,7 +22,13 @@ fn main() {
 fn solution(map: &Vec<Vec<u8>>, is_part_1: bool) -> u64 {
     let mut counter: u64 = 0;
     for (x, y) in tailhead_starts(map) {
-        dfs(&mut counter, x as i64, y as i64, &mut HashSet::new(), map, is_part_1);
+        dfs(
+            &mut counter, 
+            x as i64, 
+            y as i64, 
+            &mut HashSet::new(), 
+            map, is_part_1
+        );
     }
     counter
 }
@@ -31,7 +37,7 @@ fn dfs(
     counter: &mut u64,
     cur_x: i64,
     cur_y: i64,
-    seen: &mut HashSet<(usize, usize)>, 
+    seen: &mut HashSet<(i64, i64)>, 
     map: &Vec<Vec<u8>>,
     is_part_1: bool
 ) -> () {
@@ -46,19 +52,19 @@ fn dfs(
             continue
         }
         
-        if map[ny][nx] == map[cur_y as usize][cur_x as usize] + 1 {
+        if map[ny as usize][nx as usize] == map[cur_y as usize][cur_x as usize] + 1 {
             seen.insert((nx, ny));
-            dfs(counter, nx as i64, ny as i64, seen, map, is_part_1)
+            dfs(counter, nx, ny, seen, map, is_part_1)
         }
     }
 }
 
-fn get_neighbours(x: i64, y: i64, map: &Vec<Vec<u8>>) -> Vec<(usize, usize)> {
+fn get_neighbours(x: i64, y: i64, map: &Vec<Vec<u8>>) -> Vec<(i64, i64)> {
     vec![(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
         .iter()
         .filter(|(x, y)| !out_of_bounds(*x, *y, map))
-        .map(|(x, y)| (*x as usize, *y as usize))
-        .collect::<Vec<(usize, usize)>>()
+        .map(|(x, y)| (*x, *y))
+        .collect::<Vec<(i64, i64)>>()
 }
 
 fn out_of_bounds(x: i64, y: i64, map: &Vec<Vec<u8>>) -> bool {
